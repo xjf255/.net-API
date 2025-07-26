@@ -13,15 +13,15 @@ public class UserController : ControllerBase
 
     private readonly ILogger<UserController> _logger;
 
-    private static List<User> ListUser = new List<User>();
+    private static List<WeatherForecast> ListWeatherForecast = new List<WeatherForecast>();
 
-    public UserController(ILogger<UserController> logger)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger)
     {
         _logger = logger;
 
-        if (ListUser == null || !ListUser.Any())
+        if (ListWeatherForecast == null || !ListWeatherForecast.Any())
         {
-            ListUser = Enumerable.Range(1, 5).Select(index => new User
+            ListWeatherForecast = Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                 TemperatureC = Random.Shared.Next(-20, 55),
@@ -30,10 +30,10 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpGet(Name = "GetUser")]
-    public IEnumerable<User> Get()
+    [HttpGet(Name = "GetWeatherForecast")]
+    public IEnumerable<WeatherForecast> Get()
     {
-        return ListUser;
+        return ListWeatherForecast;
     }
 
     [HttpPost]
