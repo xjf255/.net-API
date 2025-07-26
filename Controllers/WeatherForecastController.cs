@@ -4,29 +4,37 @@ namespace C_.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+public class UserController : ControllerBase
 {
     private static readonly string[] Summaries = new[]
     {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+        "Juan", "Pedro", "Maria", "Jose", "Ana", "Luis", "Laura", "Carlos", "Sofia", "Miguel"
     };
 
-    private readonly ILogger<WeatherForecastController> _logger;
+    private readonly ILogger<UserController> _logger;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    private static List<User> ListUser = new List<User>();
+
+    public UserController(ILogger<UserController> logger)
     {
         _logger = logger;
+
+        if (ListUser == null || !ListUser.Any())
+        {
+            ListUser = Enumerable.Range(1, 5).Select(index => new User
+            {
+                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+                TemperatureC = Random.Shared.Next(-20, 55),
+                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            }).ToList();
+        }
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+    [HttpGet(Name = "GetUser")]
+    public IEnumerable<User> Get()
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
+        return ListUser;
     }
+
+    [HttpPost]
 }
